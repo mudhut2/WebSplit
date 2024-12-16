@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer Splitter</title>
+  <!-- Bootstrap CSS and JS links -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container text-center mt-5">
+    <!-- Button for starting and resetting timer -->
+    <div>
+        <button id="start" class="btn btn-success me-2">Start</button>
+        <button id="reset" class="btn btn-danger" disabled>Reset</button>
+    </div>
+    
+    <!-- Timer Display -->
+    <div class="my-4">
+      <h2 id="timer" class="display-4">00:00:00</h2>
+    </div>
+    <div> 
+        <img id="whiscash" src="whis.webp">
+    </div>
+    <!-- Button for splitting -->
+    <div>
+      <button id="split" class="btn btn-primary btn-lg me-2" disabled>Split</button>
+    </div>
+
+    <!-- Splits -->
+    <div class="mt-5">
+      <h3>Splits</h3>
+      <ul id="splits" class="list-group"></ul>
+    </div>
+  </div>
+
+  <!-- Input to specify the number of splits before stopping -->
+  <div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-2">
+            <label for="splits-before-stop" class="form-label">Stop after X splits:</label>
+            <input type="number" id="splits-before-stop" class="form-control" min="1" placeholder="Enter number of splits">
+        </div>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="settings-page.html">Settings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Save and Upload Buttons -->
+  <div class="position-fixed bottom-0 end-0 p-3">
+    <button id="save" class="btn btn-success me-2">Save Splits</button>
+    <button id="upload" class="btn btn-warning">Upload Splits</button>
+    <input type="file" id="file-input" style="display: none;" />
+  </div>
+  
+  <div class="position-fixed bottom-0 start-0 p-3">
+    <div class="text-right">Splitter with Bootstrap</div>
+  </div>
+
+  <script src="splitter.js"></script>
+</body>
+</html>

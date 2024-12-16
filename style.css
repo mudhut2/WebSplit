@@ -1,0 +1,62 @@
+#title{
+    
+}
+
+body {
+    background-color: rgb(83, 93, 116);
+}
+
+.navbar-custom {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background-color: #343a40;
+    box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Ensure navbar items are stacked vertically */
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-nav li {
+    width: 100%;
+  }
+
+  .fs-3{
+    border: rgb(119, 13, 13);
+    background-color: rgb(161, 161, 161);
+  }
+  /* Style for each list item (split) */
+.list-group-item {
+    border: 2px solid black; /* Custom border */
+    padding: 10px; /* Optional padding */
+}
+
+/* Ensure the split item is aligned using flexbox */
+.d-flex {
+    display: flex;
+    justify-content: space-between; /* Align items to left and right */
+    align-items: center; /* Optional: vertically align content */
+    gap: 15px;
+}
+
+/* Style for the split number */
+.split-number {
+    font-weight: bold; /* Make the split number bold */
+    margin-right: 10px; /* Optional margin for spacing */
+}
+
+/* Style for the split time */
+.split-time {
+    font-weight: normal; /* Split time is normal weight */
+}
+#whiscash {
+    position: absolute; /* Allow precise positioning */
+      right: 450px;        /* Align it 20px away from the right edge */
+      top: 200px;         /* Place it 150px from the top of the page */
+      max-width: 150px;   /* Limit the width to 150px */
+      height: auto;       /* Keep the aspect ratio intact */
+    }
