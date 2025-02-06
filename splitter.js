@@ -1,3 +1,7 @@
+/* 
+
+*/
+
 // Variables to store timer state
 let startTime = 0;
 let updatedTime = 0;
@@ -6,7 +10,7 @@ let running = false;
 let timerInterval = null;
 let splits = [];
 let splitCounter = 1; // Initialize counter for numbering splits
-let splitsBeforeStop = 5; // Default splits before stop
+let splitsBeforeStop = 2; // Default splits before stop
 
 // Select DOM elements
 const timerDisplay = document.getElementById('timer');
@@ -15,14 +19,11 @@ const splitButton = document.getElementById('split');
 const resetButton = document.getElementById('reset');
 const splitsList = document.getElementById('splits');
 const stopSplitsInput = document.getElementById('splits-before-stop'); // New input element
-const saveButton = document.getElementById('save');
-const uploadButton = document.getElementById('upload');
+// const saveButton = document.getElementById('save');
+// const uploadButton = document.getElementById('upload');
 const fileInput = document.getElementById('file-input');
-
-// Update the splitsBeforeStop variable whenever the user changes the value
-stopSplitsInput.addEventListener('input', function() {
-    splitsBeforeStop = parseInt(stopSplitsInput.value) || 5; // Default to 5 if empty or invalid
-});
+const addSplitButton = document.getElementById('add-split');
+const removeSplitButton = document.getElementById('remove-split');
 
 // Format time into MM:SS:MS format
 function formatTime(time) {
@@ -40,58 +41,46 @@ function pad(num) {
 // Start or stop the timer
 function toggleTimer() {
     if (!running) {
-        startTime = Date.now() - difference; // Continue from where the timer was paused
-        timerInterval = setInterval(updateTimer, 10); // Start updating the timer
-        startButton.textContent = "Pause"; // Change the button text to Pause
-        splitButton.disabled = false; // Enable the split button
-        resetButton.disabled = false; // Enable the reset button
+        startTime = Date.now() - difference; // Resume from paused time
+        timerInterval = setInterval(updateTimer, 10);
+        startButton.textContent = "Pause";
+        splitButton.disabled = false;
+        resetButton.disabled = false;
     } else {
-        clearInterval(timerInterval); // Stop the timer
-        startButton.textContent = "Resume"; // Change the button text to Resume
+        clearInterval(timerInterval); // Pause the timer
+        difference = Date.now() - startTime; // Store elapsed time before pausing
+        startButton.textContent = "Resume";
     }
-    running = !running; // Toggle the running state
+    running = !running;
 }
 
 // Update the timer display
 function updateTimer() {
-    difference = Date.now() - startTime;
-    timerDisplay.textContent = formatTime(difference); // Update the displayed time
+    if (running) {
+        difference = Date.now() - startTime;
+        timerDisplay.textContent = formatTime(difference);
+    } else {
+        clearInterval(timerInterval); // Prevents redundant intervals
+    }
 }
 
 // Split the time and save it
 function saveSplit() {
     const splitTime = formatTime(difference);
-
-    // Create list item with flexbox
-    const listItem = document.createElement('li');
-    listItem.classList.add('list-group-item', 'fs-3', 'border', 'border-dark', 'd-flex', 'justify-content-between');
-
-    // Create span for the split number
-    const splitNumber = document.createElement('span');
-    splitNumber.textContent = `#${splitCounter}`;
-    splitNumber.classList.add('split-number');
-
-    // Create span for the split time
-    const splitTimeDisplay = document.createElement('span');
+    // Select the next available list item
+    const listItem = splitsList.children[splits.length];
+    // Find the split time span and update it
+    const splitTimeDisplay = listItem.querySelector('.split-time');
     splitTimeDisplay.textContent = splitTime;
-    splitTimeDisplay.classList.add('split-time');
-
-    // Append both spans to the list item
-    listItem.appendChild(splitNumber);
-    listItem.appendChild(splitTimeDisplay);
-
-    // Append list item to the splits list
-    splitsList.appendChild(listItem);
-
-    splits.push(splitTime);
-
-    // Increment split counter for next split
-    splitCounter++;
-
-    // Check if we've reached the specified number of splits before stopping
-    if (splitCounter > splitsBeforeStop) {
-        stopTimer(); // Stop the timer when we reach the specified number of splits
+    splits.push(splitTime); // Store split time
+    if (splits.length>= splitsList.children.length) {
+        stopTimer();
+        return;
     }
+}
+
+function updateSplitCounter() {
+    splitCounter = splitsList.children.length + 1;
 }
 
 // Stop the timer
@@ -114,86 +103,74 @@ function resetTimer() {
     timerDisplay.textContent = "00:00:00";
     difference = 0;
     splitCounter = 1; // Reset counter when resetting timer
+    splits = [];
+    splitsBeforeStop = 2;
 }
 
-// Save splits as a .json file
-function saveSplits() {
-    const splitsData = JSON.stringify(splits, null, 2); // Convert splits to JSON
+function addManualSplit() {
+    splitsBeforeStop++;
+    if (splitsList.children.length >= splitsBeforeStop) return; // Limit splits
 
-    // Create a Blob with the JSON data
-    const blob = new Blob([splitsData], { type: 'application/json' });
+    const splitTime = "00:00:00"; // Placeholder time
 
-    // Create an anchor element to trigger the download
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'splits.json'; // Name of the downloaded file
+    // Create list item
+    const listItem = document.createElement('li');
+    listItem.classList.add('list-group-item', 'fs-3', 'border', 'border-dark', 'd-flex', 'justify-content-between');
 
-    // Trigger the download by simulating a click on the link
-    link.click();
+    // Create split number span
+    const splitNumber = document.createElement('span');
+    splitNumber.textContent = `#${splitsList.children.length + 1}`;
+    splitNumber.classList.add('split-number');
 
-    alert('Splits saved as splits.json!');
+    // Create split time span
+    const splitTimeDisplay = document.createElement('span');
+    splitTimeDisplay.textContent = splitTime;
+    splitTimeDisplay.classList.add('split-time');
+
+    // Append to list item
+    listItem.appendChild(splitNumber);
+    listItem.appendChild(splitTimeDisplay);
+
+    // Append to split list
+    splitsList.appendChild(listItem);
+
+    // Display the first split if it's the first time
+    if (splitsList.children.length === 1) {
+        document.getElementById('first-split').innerText = `First Split: ${splitTime}`;
+    }
 }
 
-// Upload splits (allow user to compare uploaded splits)
-function uploadSplits() {
-    fileInput.click(); // Trigger the file input dialog
-}
+// Function to remove last split
+function removeLastSplit() {
+    if (running || splits.length === 0) return;
 
-
-// Handle file upload
-fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
+    splitsList.removeChild(splitsList.lastChild);
+    splits.pop();
     
-    if (file && file.name.endsWith('.json')) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const uploadedSplits = JSON.parse(e.target.result);
-            compareSplits(uploadedSplits);
-        };
-        reader.readAsText(file);
-    } else {
-        alert('Please upload a valid .json file');
+    splitCounter = splitsList.children.length + 1; // Correctly recalculate split count
+}
+
+document.getElementById('add-split').addEventListener('click', addManualSplit);
+
+document.getElementById('remove-split').addEventListener('click', function() {
+    if (splitsList.lastChild) {
+        splitsList.removeChild(splitsList.lastChild);
+        splits.pop(); // Remove last split from array
+        updateSplitCounter();
     }
 });
 
-// Compare current splits with uploaded splits and display them in the splits container
-function compareSplits(uploadedSplits) {
-    // Clear existing splits
-    splitsList.innerHTML = '';
-
-    // Display the uploaded splits
-    uploadedSplits.forEach((splitTime, index) => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item', 'fs-3', 'border', 'border-dark', 'd-flex', 'justify-content-between');
-
-        // Create span for the split number
-        const splitNumber = document.createElement('span');
-        splitNumber.textContent = `#${index + 1}`;
-        splitNumber.classList.add('split-number');
-
-        // Create span for the split time
-        const splitTimeDisplay = document.createElement('span');
-        splitTimeDisplay.textContent = splitTime;
-        splitTimeDisplay.classList.add('split-time');
-
-        // Append both spans to the list item
-        listItem.appendChild(splitNumber);
-        listItem.appendChild(splitTimeDisplay);
-
-        // Append list item to the splits list
-        splitsList.appendChild(listItem);
-    });
-
-
-    alert('Splits uploaded and displayed! Reset to clear');
-}
+// implement upload and save split functionality 
 
 // Event listeners
 startButton.addEventListener('click', toggleTimer);
 splitButton.addEventListener('click', saveSplit);
 resetButton.addEventListener('click', resetTimer);
-saveButton.addEventListener('click', saveSplits);
-uploadButton.addEventListener('click', uploadSplits);
+//saveButton.addEventListener('click', saveSplits);
+//uploadButton.addEventListener('click', uploadSplits);
+addSplitButton.addEventListener('click', addManualSplit);
+removeSplitButton.addEventListener('click', removeLastSplit);
+
 
 // Initialize with localStorage splits
 window.addEventListener('load', function() {

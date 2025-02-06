@@ -1,33 +1,52 @@
-#title{
-    
+body {
+  background-color: #000000;
+  color: rgb(255, 255, 255);
+  height: 100vh; /* Ensure the body takes full viewport height */
+  overflow-y: auto; /* Allow the page to scroll if the content is too tall */
 }
 
-body {
-    background-color: rgb(83, 93, 116);
+#split-controls {
+  position: absolute; /* Keep it fixed at the bottom */
+  bottom: 20px; /* Add some space from the bottom of the screen */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; /* Ensure buttons are on top of other elements */
+}
+
+#splits {
+  max-height: 80vh; /* Limit the height of the splits list */
+  overflow-y: auto; /* Allow scrolling within the splits list */
+}
+
+#split-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  position: absolute; /* Keep buttons fixed */
+  bottom: 20px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .navbar-custom {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100%;
-    background-color: #343a40;
-    box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
-  }
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 10%;
+  background-color: #2d96ff;
+  box-shadow: -2px 0px 5px rgba(97, 97, 97, 0.5);
+  z-index: 1000; /* Ensure it stays above other elements */
+}
 
-  /* Ensure navbar items are stacked vertically */
-  .navbar-nav {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar-nav li {
-    width: 100%;
-  }
-
+/* Optional: make sure the dropdown menu aligns to the right */
+.dropdown-menu-end {
+  right: 0;
+}
   .fs-3{
     border: rgb(119, 13, 13);
-    background-color: rgb(161, 161, 161);
+    background-color: rgb(155, 155, 155);
+    width: 60%;
+    margin-left: 20%;
   }
   /* Style for each list item (split) */
 .list-group-item {
@@ -53,10 +72,37 @@ body {
 .split-time {
     font-weight: normal; /* Split time is normal weight */
 }
-#whiscash {
-    position: absolute; /* Allow precise positioning */
-      right: 450px;        /* Align it 20px away from the right edge */
-      top: 200px;         /* Place it 150px from the top of the page */
-      max-width: 150px;   /* Limit the width to 150px */
-      height: auto;       /* Keep the aspect ratio intact */
-    }
+
+#logo {
+  display: fixed;
+  height:40px;
+  width: 50px;
+  filter: invert(100%);
+}
+
+/* Align buttons side by side */
+#split-controls {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: bottom 0.3s ease-in-out; /* Smooth transition when moving */
+  z-index: 10; /* Ensure buttons stay on top */
+}
+
+/* Style for both buttons */
+.split-btn {
+  width: 40px; /* Equal width */
+  height: 40px; /* Equal height */
+  font-size: 20px;
+  text-align: center;
+  border: none;
+  background-color: #6256a7; /* Bootstrap primary color */
+  color: rgb(255, 255, 255);
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+/* Button hover effect */
+.split-btn:hover {
+  background-color: #7a00b3;
+}
