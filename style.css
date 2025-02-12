@@ -1,21 +1,16 @@
+html, body {
+  overflow: hidden;
+}
+
 body {
   background-color: #000000;
   color: rgb(255, 255, 255);
   height: 100vh; /* Ensure the body takes full viewport height */
-  overflow-y: auto; /* Allow the page to scroll if the content is too tall */
-}
-
-#split-controls {
-  position: absolute; /* Keep it fixed at the bottom */
-  bottom: 20px; /* Add some space from the bottom of the screen */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10; /* Ensure buttons are on top of other elements */
 }
 
 #splits {
-  max-height: 80vh; /* Limit the height of the splits list */
-  overflow-y: auto; /* Allow scrolling within the splits list */
+    max-height: 565px; /* Adjust as needed */
+    overflow-y: auto;
 }
 
 #split-controls {
@@ -42,12 +37,14 @@ body {
 .dropdown-menu-end {
   right: 0;
 }
-  .fs-3{
-    border: rgb(119, 13, 13);
-    background-color: rgb(155, 155, 155);
-    width: 60%;
-    margin-left: 20%;
-  }
+
+.fs-3 {
+  border: rgb(119, 13, 13);
+  background-color: rgb(155, 155, 155);
+  width: 60%;
+  margin-left: 20%;
+}
+
   /* Style for each list item (split) */
 .list-group-item {
     border: 2px solid black; /* Custom border */
@@ -105,4 +102,21 @@ body {
 /* Button hover effect */
 .split-btn:hover {
   background-color: #7a00b3;
+}
+
+.list-group-item, 
+.d-flex, 
+.split-number, 
+.split-time {
+    font-family: "Arial", sans-serif; /* Change to your preferred font */
+    font-size: 30px; /* Adjust as needed */
+    font-weight: bold; /* Optional */
+    color: rgb(0, 0, 0); /* Ensures text is readable */
+}
+
+.current-split {
+  background-color: #ffcc00 !important; /* Highlight color */
+  color: black !important; /* Text color */
+  font-weight: ;
+  border: 2px solid white; /* Optional: add a border */
 }

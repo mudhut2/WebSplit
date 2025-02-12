@@ -105,6 +105,7 @@ function resetTimer() {
     splitCounter = 1; // Reset counter when resetting timer
     splits = [];
     splitsBeforeStop = 2;
+    addManualSplit();
 }
 
 function addManualSplit() {
@@ -180,3 +181,34 @@ window.addEventListener('load', function() {
         splitCounter = splits.length + 1; // Start counting splits after the loaded ones
     }
 });
+
+function highlightCurrentSplit(index) {
+    // Remove the highlight from all splits first
+    document.querySelectorAll('.list-group-item').forEach(item => {
+        item.classList.remove('current-split');
+    });
+
+    // Add the highlight to the current split
+    const splits = document.querySelectorAll('.list-group-item');
+    if (splits[index]) {
+        splits[index].classList.add('current-split');
+    }
+}
+
+// Example: Call this function when a new split is reached
+let currentSplitIndex = 1;
+document.getElementById('split').addEventListener('click', () => {
+    highlightCurrentSplit(currentSplitIndex);
+    currentSplitIndex++;
+});
+
+window.onload = function () {
+    addManualSplit(); // Ensure at least one split cell is ready on page load
+
+    // Load stored splits from localStorage
+    const storedSplits = JSON.parse(localStorage.getItem('splits'));
+    if (storedSplits) {
+        splits = storedSplits;
+        splitCounter = splits.length + 1; // Start counting splits after the loaded ones
+    }
+};
