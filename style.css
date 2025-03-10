@@ -6,11 +6,14 @@ body {
   background-color: #000000;
   color: rgb(255, 255, 255);
   height: 100vh; /* Ensure the body takes full viewport height */
+  margin: 0; /* Ensure no default body margin */
 }
 
-#splits {
-    max-height: 565px; /* Adjust as needed */
-    overflow-y: auto;
+body {
+  background-color: #000000;
+  color: rgb(255, 255, 255);
+  height: 100vh; /* Ensure the body takes full viewport height */
+  margin: 0; /* Ensure no default body margin */
 }
 
 #split-controls {
@@ -49,6 +52,7 @@ body {
 .list-group-item {
     border: 2px solid black; /* Custom border */
     padding: 10px; /* Optional padding */
+    min-height: 50px; /* Ensure the list items have a minimum height even if empty */
 }
 
 /* Ensure the split item is aligned using flexbox */

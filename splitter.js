@@ -1,16 +1,12 @@
-/* 
-
-*/
-
 // Variables to store timer state
 let startTime = 0;
 let updatedTime = 0;
-let difference = 0; // Time that has passed since last action (start or split)
+let difference = 0;
 let running = false;
 let timerInterval = null;
 let splits = [];
-let splitCounter = 1; // Initialize counter for numbering splits
-let splitsBeforeStop = 2; // Default splits before stop
+let splitCounter = 0;
+let splitsBeforeStop = -1;
 
 // Select DOM elements
 const timerDisplay = document.getElementById('timer');
@@ -18,10 +14,6 @@ const startButton = document.getElementById('start');
 const splitButton = document.getElementById('split');
 const resetButton = document.getElementById('reset');
 const splitsList = document.getElementById('splits');
-const stopSplitsInput = document.getElementById('splits-before-stop'); // New input element
-// const saveButton = document.getElementById('save');
-// const uploadButton = document.getElementById('upload');
-const fileInput = document.getElementById('file-input');
 const addSplitButton = document.getElementById('add-split');
 const removeSplitButton = document.getElementById('remove-split');
 
@@ -33,7 +25,7 @@ function formatTime(time) {
     return `${pad(minutes)}:${pad(seconds)}:${pad(milliseconds)}`;
 }
 
-// Pad single digits with zeroes (e.g., 9 -> 09)
+// Pad single digits with zeroes
 function pad(num) {
     return num < 10 ? `0${num}` : num;
 }
@@ -41,14 +33,14 @@ function pad(num) {
 // Start or stop the timer
 function toggleTimer() {
     if (!running) {
-        startTime = Date.now() - difference; // Resume from paused time
+        startTime = Date.now() - difference;
         timerInterval = setInterval(updateTimer, 10);
         startButton.textContent = "Pause";
         splitButton.disabled = false;
         resetButton.disabled = false;
     } else {
-        clearInterval(timerInterval); // Pause the timer
-        difference = Date.now() - startTime; // Store elapsed time before pausing
+        clearInterval(timerInterval);
+        difference = Date.now() - startTime;
         startButton.textContent = "Resume";
     }
     running = !running;
@@ -59,28 +51,26 @@ function updateTimer() {
     if (running) {
         difference = Date.now() - startTime;
         timerDisplay.textContent = formatTime(difference);
-    } else {
-        clearInterval(timerInterval); // Prevents redundant intervals
     }
 }
 
-// Split the time and save it
+// Save split time and stop when the limit is reached
 function saveSplit() {
-    const splitTime = formatTime(difference);
-    // Select the next available list item
-    const listItem = splitsList.children[splits.length];
-    // Find the split time span and update it
-    const splitTimeDisplay = listItem.querySelector('.split-time');
-    splitTimeDisplay.textContent = splitTime;
-    splits.push(splitTime); // Store split time
-    if (splits.length>= splitsList.children.length) {
+    if (splits.length >= splitsBeforeStop) {
         stopTimer();
         return;
     }
-}
 
-function updateSplitCounter() {
-    splitCounter = splitsList.children.length + 1;
+    const splitTime = formatTime(difference);
+    const listItem = splitsList.children[splits.length];
+
+    if (listItem) {
+        const splitTimeDisplay = listItem.querySelector('.split-time');
+        splitTimeDisplay.textContent = splitTime;
+    }
+
+    splits.push(splitTime);
+    highlightCurrentSplit(splits.length);
 }
 
 // Stop the timer
@@ -89,29 +79,31 @@ function stopTimer() {
     running = false;
     startButton.textContent = "Start";
     splitButton.disabled = true;
-    resetButton.disabled = false; // Allow reset after stopping
+    resetButton.disabled = false;
 }
 
-// Reset the timer and splits
+// Reset the timer
 function resetTimer() {
     clearInterval(timerInterval);
     running = false;
     startButton.textContent = "Start";
     splitButton.disabled = true;
     resetButton.disabled = true;
-    splitsList.innerHTML = '';
+
     timerDisplay.textContent = "00:00:00";
     difference = 0;
-    splitCounter = 1; // Reset counter when resetting timer
+    splitCounter = 1;
+    
     splits = [];
-    splitsBeforeStop = 2;
+    splitsList.innerHTML = '';
+
     addManualSplit();
+
 }
 
+// Add a new split slot
 function addManualSplit() {
     splitsBeforeStop++;
-    if (splitsList.children.length >= splitsBeforeStop) return; // Limit splits
-
     const splitTime = "00:00:00"; // Placeholder time
 
     // Create list item
@@ -135,80 +127,43 @@ function addManualSplit() {
     // Append to split list
     splitsList.appendChild(listItem);
 
+    // Update the split counter
+    splitCounter = splitsList.children.length;
+
     // Display the first split if it's the first time
     if (splitsList.children.length === 1) {
         document.getElementById('first-split').innerText = `First Split: ${splitTime}`;
     }
 }
 
-// Function to remove last split
+// Remove last split
 function removeLastSplit() {
-    if (running || splits.length === 0) return;
-
-    splitsList.removeChild(splitsList.lastChild);
-    splits.pop();
-    
-    splitCounter = splitsList.children.length + 1; // Correctly recalculate split count
+    if (!running && splitsList.lastChild) {
+        splitsList.removeChild(splitsList.lastChild);
+        splits.pop();
+    }
 }
 
-document.getElementById('add-split').addEventListener('click', addManualSplit);
+// Highlight current split
+function highlightCurrentSplit(index) {
+    document.querySelectorAll('.list-group-item').forEach(item => {
+        item.classList.remove('current-split');
+    });
 
-document.getElementById('remove-split').addEventListener('click', function() {
-    if (splitsList.lastChild) {
-        splitsList.removeChild(splitsList.lastChild);
-        splits.pop(); // Remove last split from array
-        updateSplitCounter();
+    const splits = document.querySelectorAll('.list-group-item');
+    if (splits[index - 1]) {
+        splits[index - 1].classList.add('current-split');
     }
-});
-
-// implement upload and save split functionality 
+}
 
 // Event listeners
 startButton.addEventListener('click', toggleTimer);
 splitButton.addEventListener('click', saveSplit);
 resetButton.addEventListener('click', resetTimer);
-//saveButton.addEventListener('click', saveSplits);
-//uploadButton.addEventListener('click', uploadSplits);
 addSplitButton.addEventListener('click', addManualSplit);
 removeSplitButton.addEventListener('click', removeLastSplit);
 
-
-// Initialize with localStorage splits
-window.addEventListener('load', function() {
-    const storedSplits = JSON.parse(localStorage.getItem('splits'));
-    if (storedSplits) {
-        splits = storedSplits;
-        splitCounter = splits.length + 1; // Start counting splits after the loaded ones
-    }
+// Initialize on page load
+window.addEventListener('load', function () {
+    addManualSplit();
 });
-
-function highlightCurrentSplit(index) {
-    // Remove the highlight from all splits first
-    document.querySelectorAll('.list-group-item').forEach(item => {
-        item.classList.remove('current-split');
-    });
-
-    // Add the highlight to the current split
-    const splits = document.querySelectorAll('.list-group-item');
-    if (splits[index]) {
-        splits[index].classList.add('current-split');
-    }
-}
-
-// Example: Call this function when a new split is reached
-let currentSplitIndex = 1;
-document.getElementById('split').addEventListener('click', () => {
-    highlightCurrentSplit(currentSplitIndex);
-    currentSplitIndex++;
-});
-
-window.onload = function () {
-    addManualSplit(); // Ensure at least one split cell is ready on page load
-
-    // Load stored splits from localStorage
-    const storedSplits = JSON.parse(localStorage.getItem('splits'));
-    if (storedSplits) {
-        splits = storedSplits;
-        splitCounter = splits.length + 1; // Start counting splits after the loaded ones
-    }
-};
