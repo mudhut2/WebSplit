@@ -1,4 +1,6 @@
-// Variables to store timer state
+// ================================
+// VARIABLES
+// ================================
 let startTime = 0;
 let updatedTime = 0;
 let difference = 0;
@@ -8,7 +10,7 @@ let splits = [];
 let splitCounter = 0;
 let splitsBeforeStop = -1;
 
-// Select DOM elements
+// DOM ELEMENTS
 const timerDisplay = document.getElementById('timer');
 const startButton = document.getElementById('start');
 const splitButton = document.getElementById('split');
@@ -16,6 +18,11 @@ const resetButton = document.getElementById('reset');
 const splitsList = document.getElementById('splits');
 const addSplitButton = document.getElementById('add-split');
 const removeSplitButton = document.getElementById('remove-split');
+
+
+// ================================
+// TIMER FUNCTIONS
+// ================================
 
 // Format time into MM:SS:MS format
 function formatTime(time) {
@@ -54,25 +61,6 @@ function updateTimer() {
     }
 }
 
-// Save split time and stop when the limit is reached
-function saveSplit() {
-    if (splits.length >= splitsBeforeStop) {
-        stopTimer();
-        return;
-    }
-
-    const splitTime = formatTime(difference);
-    const listItem = splitsList.children[splits.length];
-
-    if (listItem) {
-        const splitTimeDisplay = listItem.querySelector('.split-time');
-        splitTimeDisplay.textContent = splitTime;
-    }
-
-    splits.push(splitTime);
-    highlightCurrentSplit(splits.length);
-}
-
 // Stop the timer
 function stopTimer() {
     clearInterval(timerInterval);
@@ -86,22 +74,55 @@ function stopTimer() {
 function resetTimer() {
     clearInterval(timerInterval);
     running = false;
+
+    // Reset UI and timer values
     startButton.textContent = "Start";
     splitButton.disabled = true;
     resetButton.disabled = true;
-
     timerDisplay.textContent = "00:00:00";
+    
     difference = 0;
-    splitCounter = 1;
+    splitCounter = 0;
+    splitsBeforeStop = -1;
     
     splits = [];
     splitsList.innerHTML = '';
 
     addManualSplit();
-
 }
 
-// Add a new split slot
+// ================================
+// SPLIT FUNCTIONS
+// ================================
+
+// Save the current split time and stop properly on the last split
+function saveSplit() {
+    const splitTime = formatTime(difference);
+
+    // Add split time to the DOM
+    const listItem = splitsList.children[splits.length];
+
+    if (listItem) {
+        const splitTimeDisplay = listItem.querySelector('.split-time');
+        splitTimeDisplay.textContent = splitTime;
+    }
+
+    // Add the split to the array
+    splits.push(splitTime);
+    highlightCurrentSplit(splits.length);
+
+    // ✅ Correct stopping condition
+    if (splits.length > splitsBeforeStop) {  
+        stopTimer();
+        return;
+    }
+
+    
+}
+
+
+
+// Add a new split slot manually
 function addManualSplit() {
     splitsBeforeStop++;
     const splitTime = "00:00:00"; // Placeholder time
@@ -110,33 +131,25 @@ function addManualSplit() {
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item', 'fs-3', 'border', 'border-dark', 'd-flex', 'justify-content-between');
 
-    // Create split number span
+    // Split number
     const splitNumber = document.createElement('span');
-    splitNumber.textContent = `#${splitsList.children.length + 1}`;
+    splitNumber.textContent = `${splitsList.children.length + 1}`;
     splitNumber.classList.add('split-number');
 
-    // Create split time span
+    // Split time display
     const splitTimeDisplay = document.createElement('span');
     splitTimeDisplay.textContent = splitTime;
     splitTimeDisplay.classList.add('split-time');
 
-    // Append to list item
+    // Append elements
     listItem.appendChild(splitNumber);
     listItem.appendChild(splitTimeDisplay);
-
-    // Append to split list
     splitsList.appendChild(listItem);
 
-    // Update the split counter
     splitCounter = splitsList.children.length;
-
-    // Display the first split if it's the first time
-    if (splitsList.children.length === 1) {
-        document.getElementById('first-split').innerText = `First Split: ${splitTime}`;
-    }
 }
 
-// Remove last split
+// Remove the last split
 function removeLastSplit() {
     if (!running && splitsList.lastChild) {
         splitsList.removeChild(splitsList.lastChild);
@@ -144,19 +157,21 @@ function removeLastSplit() {
     }
 }
 
-// Highlight current split
+// Highlight the current split
 function highlightCurrentSplit(index) {
     document.querySelectorAll('.list-group-item').forEach(item => {
         item.classList.remove('current-split');
     });
 
-    const splits = document.querySelectorAll('.list-group-item');
-    if (splits[index - 1]) {
-        splits[index - 1].classList.add('current-split');
+    const splitItems = document.querySelectorAll('.list-group-item');
+    if (splitItems[index - 1]) {
+        splitItems[index - 1].classList.add('current-split');
     }
 }
 
-// Event listeners
+// ================================
+// EVENT LISTENERS
+// ================================
 startButton.addEventListener('click', toggleTimer);
 splitButton.addEventListener('click', saveSplit);
 resetButton.addEventListener('click', resetTimer);
@@ -164,6 +179,4 @@ addSplitButton.addEventListener('click', addManualSplit);
 removeSplitButton.addEventListener('click', removeLastSplit);
 
 // Initialize on page load
-window.addEventListener('load', function () {
-    addManualSplit();
-});
+window.addEventListener('load', () => addManualSplit());

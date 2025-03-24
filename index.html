@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebSplit</title>
-  <!-- Bootstrap CSS and JS links -->
+  
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -12,11 +13,33 @@
 </head>
 
 <body>
+  
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">WebSplit</a>
+      
+      <!-- Toggle Button for Small Screens -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="settings-page.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
   <div class="container text-center mt-5">
-    <!-- Button for starting and resetting timer -->
+    <!-- Timer Controls -->
     <div>
-        <button id="start" class="btn btn-success me-2">Start</button>
-        <button id="reset" class="btn btn-danger" disabled>Reset</button>
+      <button id="start" class="btn btn-success me-2">Start</button>
+      <button id="reset" class="btn btn-danger" disabled>Reset</button>
     </div>
 
     <!-- Timer Display -->
@@ -24,20 +47,19 @@
       <h2 id="timer" class="display-4">00:00:00</h2>
     </div>
     
-    <!-- Button for splitting -->
+    <!-- Split Button -->
     <div>
-      <button id="split" class="btn btn-primary btn-lg  px-5 py-3 me-2" disabled>Split</button>
+      <button id="split" class="btn btn-primary btn-lg px-5 py-3 me-2" disabled>Split</button>
     </div>
 
-    <!-- Splits -->
+    <!-- Splits List -->
     <div class="mt-5">
-      <h3>title?</h3>
+      <h3>Splits</h3>
       <ul id="splits" class="list-group"></ul>
     </div>
   </div>
-  
 
-  <!-- Add, remove splits from list -->
+  <!-- Split Controls -->
   <div class="container">
     <div class="row justify-content-center mt-4">
       <div id="split-controls" class="d-flex justify-content-center">
@@ -47,35 +69,9 @@
     </div>
   </div>
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-dark bg-dark navbar-custom">
-  <div class="container-fluid">
-    <!-- Toggle Button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
-    <!-- Collapsible Content -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="index.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="settings-page.html">Settings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="about.html">About</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  <!-- Implement Save and Upload Buttons -->
+  <!-- Save and Upload Buttons -->
   <div class="position-fixed bottom-0 start-0 p-3 d-flex align-items-center">
-    <img id="logo" src="webspliticon.png">
+    <img id="logo" src="webspliticon.png" alt="WebSplit Icon">
   </div>
 
   <script src="splitter.js"></script>

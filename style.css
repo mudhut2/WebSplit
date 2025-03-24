@@ -1,126 +1,135 @@
+/* ================================
+   GLOBAL STYLES
+=================================== */
 html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
 }
 
-body {
-  background-color: #000000;
-  color: rgb(255, 255, 255);
-  height: 100vh; /* Ensure the body takes full viewport height */
-  margin: 0; /* Ensure no default body margin */
+/* ================================
+   NAVIGATION BAR
+=================================== */
+.navbar {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
-body {
-  background-color: #000000;
-  color: rgb(255, 255, 255);
-  height: 100vh; /* Ensure the body takes full viewport height */
-  margin: 0; /* Ensure no default body margin */
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
+.navbar-brand:hover {
+  color: #ffcc00; 
+}
+
+.navbar-nav .nav-link {
+  color: #ffffff !important;
+  transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ffcc00 !important;
+}
+
+/* ================================
+   TIMER AND BUTTONS
+=================================== */
+#timer {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.btn {
+  transition: background 0.3s, transform 0.1s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* Split Controls */
 #split-controls {
   display: flex;
   gap: 10px;
   justify-content: center;
-  position: absolute; /* Keep buttons fixed */
-  bottom: 20px; /* Adjust as needed */
+  position: fixed;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 10;
 }
 
-.navbar-custom {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 10%;
-  background-color: #2d96ff;
-  box-shadow: -2px 0px 5px rgba(97, 97, 97, 0.5);
-  z-index: 1000; /* Ensure it stays above other elements */
+/* Split Control Buttons */
+.split-btn {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  color: #fff;
+  border: none;
+  background-color: #6256a7;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
 }
 
-/* Optional: make sure the dropdown menu aligns to the right */
-.dropdown-menu-end {
-  right: 0;
+.split-btn:hover {
+  background-color: #7a00b3;
+  transform: scale(1.1);
 }
 
-.fs-3 {
-  border: rgb(119, 13, 13);
-  background-color: rgb(155, 155, 155);
-  width: 60%;
-  margin-left: 20%;
-}
-
-  /* Style for each list item (split) */
+/* ================================
+   SPLITS LIST
+=================================== */
 .list-group-item {
-    border: 2px solid black; /* Custom border */
-    padding: 10px; /* Optional padding */
-    min-height: 50px; /* Ensure the list items have a minimum height even if empty */
+  border: 2px solid #000;
+  padding: 15px;
+  min-height: 60px;
+  font-size: 1.5rem;
+  color: #000;
+  background-color: #fff;
 }
 
-/* Ensure the split item is aligned using flexbox */
 .d-flex {
-    display: flex;
-    justify-content: space-between; /* Align items to left and right */
-    align-items: center; /* Optional: vertically align content */
-    gap: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
 }
 
-/* Style for the split number */
-.split-number {
-    font-weight: bold; /* Make the split number bold */
-    margin-right: 10px; /* Optional margin for spacing */
+/* Current Split Highlight */
+.current-split {
+  background-color: #ffcc00 !important;
+  color: black !important;
+  font-weight: bold;
+  border: 2px solid white;
 }
 
-/* Style for the split time */
-.split-time {
-    font-weight: normal; /* Split time is normal weight */
-}
-
+/* ================================
+   LOGO
+=================================== */
 #logo {
-  display: fixed;
-  height:40px;
+  height: 40px;
   width: 50px;
   filter: invert(100%);
 }
 
-/* Align buttons side by side */
-#split-controls {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: bottom 0.3s ease-in-out; /* Smooth transition when moving */
-  z-index: 10; /* Ensure buttons stay on top */
-}
+/* ================================
+   RESPONSIVE DESIGN
+=================================== */
+@media (max-width: 768px) {
+  #timer {
+    font-size: 3rem;
+  }
 
-/* Style for both buttons */
-.split-btn {
-  width: 40px; /* Equal width */
-  height: 40px; /* Equal height */
-  font-size: 20px;
-  text-align: center;
-  border: none;
-  background-color: #6256a7; /* Bootstrap primary color */
-  color: rgb(255, 255, 255);
-  border-radius: 16px;
-  cursor: pointer;
-}
-
-/* Button hover effect */
-.split-btn:hover {
-  background-color: #7a00b3;
-}
-
-.list-group-item, 
-.d-flex, 
-.split-number, 
-.split-time {
-    font-family: "Arial", sans-serif; /* Change to your preferred font */
-    font-size: 30px; /* Adjust as needed */
-    font-weight: bold; /* Optional */
-    color: rgb(0, 0, 0); /* Ensures text is readable */
-}
-
-.current-split {
-  background-color: #ffcc00 !important; /* Highlight color */
-  color: black !important; /* Text color */
-  font-weight: ;
-  border: 2px solid white; /* Optional: add a border */
+  .split-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
 }
