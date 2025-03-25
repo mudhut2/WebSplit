@@ -1,0 +1,18 @@
+Next Implementations:
+    - clean up main page like splits titel 
+    - settings page functionality for making custon keybinds 
+
+
+
+
+
+
+
+
+
+
+What is WebSplit:
+
+    The Goal is for WebSplit to be a fully functional timer splitting application with accurate timing to the frame for speedruns. This includes 
+    the ability to load/compare times and store these on the web for access anywhere. Achieving frame-perfect timing in a web application is tricky because of JavaScripts single-threaded nature (it can only do one action at a time and must wait for processes to complete). I am slowly figuring out how to negate this major drawback
+    but for now the timing remains inconsistent in a speedrun context.  

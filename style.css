@@ -86,13 +86,22 @@ html, body {
 /* ================================
    SPLITS LIST
 =================================== */
+
+/* Make the splits list container scrollable */
+#splits {
+  height: 500px;  /* Set a fixed height for the container */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  padding-right: 10px;  /* Optional: To account for scrollbar space */
+}
+
 .list-group-item {
   border: 2px solid #000;
   padding: 15px;
   min-height: 60px;
   font-size: 1.5rem;
   color: #000;
-  background-color: #fff;
+  background-color: #929292;
+  overflow:auto;
 }
 
 .d-flex {
@@ -110,9 +119,6 @@ html, body {
   border: 2px solid white;
 }
 
-/* ================================
-   LOGO
-=================================== */
 #logo {
   height: 40px;
   width: 50px;

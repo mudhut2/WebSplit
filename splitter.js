@@ -32,9 +32,8 @@ function formatTime(time) {
     return `${pad(minutes)}:${pad(seconds)}:${pad(milliseconds)}`;
 }
 
-// Pad single digits with zeroes
-function pad(num) {
-    return num < 10 ? `0${num}` : num;
+function pad(num) { 
+    return num < 10 ? `0${num}` : num; // fills in 0's on timer
 }
 
 // Start or stop the timer
@@ -115,12 +114,8 @@ function saveSplit() {
     if (splits.length > splitsBeforeStop) {  
         stopTimer();
         return;
-    }
-
-    
+    }   
 }
-
-
 
 // Add a new split slot manually
 function addManualSplit() {
@@ -180,3 +175,20 @@ removeSplitButton.addEventListener('click', removeLastSplit);
 
 // Initialize on page load
 window.addEventListener('load', () => addManualSplit());
+
+// Event listener for keyboard shortcuts
+window.addEventListener('keydown', (event) => {
+    switch (event.keyCode) {
+        case 220: 
+            toggleTimer();
+            break;
+        case 220:  // backslash for split \
+            saveSplit();
+            break;
+        case 82:  // '`/~' key for Reset
+            resetTimer();
+            break;
+        default:
+            break;
+    }
+});
